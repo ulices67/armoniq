@@ -5,8 +5,8 @@ import { readExecutionProfile } from "./scripts/execution-profile.mjs";
 import { sites } from "./build/sites-vite-plugin";
 import { connectorPreview } from "./build/connector-preview-plugin.mjs";
 
-const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
-  "00000000-0000-4000-8000-000000000000";
+const ARMONIQ_D1_DATABASE_ID =
+  process.env.CLOUDFLARE_D1_DATABASE_ID || "7b77c8e5-2f17-4ad0-8321-6f0d714f1720";
 
 const { d1, r2 } = hostingConfig;
 
@@ -15,14 +15,15 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const managedLinux = readExecutionProfile() === "managed-linux";
 
 const localBindingConfig = {
+  name: "armoniq",
   main: "./build/sites-worker.ts",
   compatibility_flags: ["nodejs_compat"],
   d1_databases: d1
     ? [
         {
           binding: d1,
-          database_name: "site-creator-d1",
-          database_id: SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
+          database_name: "armoniq-db",
+          database_id: ARMONIQ_D1_DATABASE_ID,
         },
       ]
     : [],

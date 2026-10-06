@@ -2,7 +2,7 @@ import { getChatGPTUser } from '../chatgpt-auth';
 import Armoniq from '@/components/armoniq';
 import { notFound } from 'next/navigation';
 export const dynamic='force-dynamic';
-const routes=['bienvenida','acceso','perfil-musical','inicio','aprender','leccion','practica','afinador','afinaciones','metronomo','acordes','notas','canciones','cancion','estudio','oido','ritmo','profesor','perfil','privacidad'];
+const routes=['bienvenida','acceso','perfil-musical','inicio','aprender','leccion','practica','afinador','afinaciones','metronomo','acordes','notas','canciones','cancion','estudio','oido','ritmo','profesor','perfil','privacidad','swift'];
 export default async function Page({params}:{params:Promise<{path:string[]}>}){
  const {path}=await params;if(path.length>2||!routes.includes(path[0]))notFound();
  const user=await getChatGPTUser();

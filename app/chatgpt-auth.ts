@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export type ChatGPTUser = {
@@ -22,21 +22,40 @@ export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
   const userId = requestHeaders.get(USER_ID_HEADER);
   const email = requestHeaders.get(USER_EMAIL_HEADER);
-  if (!userId || !email) return null;
+  if (userId && email) {
+    const encodedFullName = requestHeaders.get(USER_FULL_NAME_HEADER);
+    const fullName =
+      encodedFullName &&
+      requestHeaders.get(USER_FULL_NAME_ENCODING_HEADER) === PERCENT_ENCODED_UTF8
+        ? safeDecodeURIComponent(encodedFullName)
+        : null;
 
-  const encodedFullName = requestHeaders.get(USER_FULL_NAME_HEADER);
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get(USER_FULL_NAME_ENCODING_HEADER) === PERCENT_ENCODED_UTF8
-      ? safeDecodeURIComponent(encodedFullName)
-      : null;
+    return {
+      userId,
+      displayName: fullName ?? email,
+      email,
+      fullName,
+    };
+  }
 
-  return {
-    userId,
-    displayName: fullName ?? email,
-    email,
-    fullName,
-  };
+  try {
+    const cookieStore = await cookies();
+    const cookieUserId = cookieStore.get("armoniq_user_id")?.value;
+    if (cookieUserId) {
+      const cookieEmail = cookieStore.get("armoniq_user_email")?.value || "musico@armoniq.app";
+      const cookieName = cookieStore.get("armoniq_user_name")?.value || "Músico Armoniq";
+      return {
+        userId: cookieUserId,
+        displayName: cookieName,
+        email: cookieEmail,
+        fullName: cookieName,
+      };
+    }
+  } catch {
+    // Ignore context where cookies are inaccessible
+  }
+
+  return null;
 }
 
 export async function requireChatGPTUser(
