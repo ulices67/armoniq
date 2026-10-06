@@ -1,0 +1,25 @@
+'use client';
+import {createContext,useContext} from 'react';
+import {Activity,BookOpen,Music2,Guitar,Piano,Drum,Mic,House,GraduationCap,Library,UserRound,AudioLines,Timer,Headphones,Sparkles,Flame,Target,Settings2,Volume2,Check,Clock,Heart,Play,Pause,Repeat2,ChevronRight,Plus,Minus,Sun,Leaf,ShieldCheck} from 'lucide-react';
+import {Select,SelectTrigger,SelectValue,SelectContent,SelectItem} from '@/components/ui/select';
+import {Progress} from '@/components/ui/progress';
+import {chords,AppState,Profile,frequency} from '@/lib/content';
+import {playNotes} from '@/lib/audio';
+import {toast} from 'sonner';
+export const icons={activity:Activity,book:BookOpen,music:Music2,guitar:Guitar,piano:Piano,drum:Drum,mic:Mic,home:House,learn:GraduationCap,library:Library,user:UserRound,wave:AudioLines,tempo:Timer,headphones:Headphones,spark:Sparkles,flame:Flame,target:Target,settings:Settings2,volume:Volume2,check:Check,clock:Clock,heart:Heart,play:Play,pause:Pause,repeat:Repeat2,next:ChevronRight,plus:Plus,minus:Minus,sun:Sun,leaf:Leaf,shield:ShieldCheck};
+export function Icon({name,size=22}:{name:string;size?:number}){const C=icons[name as keyof typeof icons]||Music2;return <C size={size} strokeWidth={1.6} aria-hidden/>;}
+export function Mark(){return <svg width="46" height="42" viewBox="0 0 64 50" aria-hidden><path d="M4 27c10-28 18-25 29 0s20 25 27 0M4 37c10-28 18-25 29 0s20 25 27 0M13 12c8-15 14-5 23 14s18 16 23 4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>;}
+export function Logo(){return <a className="logo" href="/inicio" aria-label="Armoniq inicio"><Mark/><span>Armoniq<small>MÚSICA PARA TU HISTORIA</small></span></a>;}
+export function SelectField({label,value,onChange,options}:{label:string;value:string;onChange:(v:string)=>void;options:{value:string;label:string}[]}){return <label className="field"><span>{label}</span><Select value={value} onValueChange={onChange}><SelectTrigger className="select-control" aria-label={label}><SelectValue/></SelectTrigger><SelectContent className="select-popup">{options.map(o=><SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select></label>;}
+export function Meter({value,label}:{value:number;label:string}){return <Progress value={value} aria-label={label} className="meter"/>;}
+export function Heading({eyebrow,title,subtitle,children}:{eyebrow?:string;title:string;subtitle?:string;children?:React.ReactNode}){return <div className="page-heading"><div>{eyebrow&&<p className="eyebrow">{eyebrow}</p>}<h1>{title}<span className="title-spark">✳</span></h1>{subtitle&&<p>{subtitle}</p>}</div>{children}</div>;}
+export function Section({title,href,label='Ver todo',children}:{title:string;href?:string;label?:string;children:React.ReactNode}){return <section className="section"><div className="section-heading"><h2>{title}</h2>{href&&<a href={href}>{label}<Icon name="next" size={17}/></a>}</div>{children}</section>;}
+export function CardLink({href,title,detail,icon,color='green'}:{href:string;title:string;detail:string;icon:string;color?:string}){return <a className="card-link" href={href}><span className={'icon-bubble '+color}><Icon name={icon} size={26}/></span><strong>{title}</strong><p>{detail}</p><Icon name="next" size={18}/></a>;}
+export function ChordDiagram({chord='G'}:{chord?:string}){const c=chords[chord]||chords.G;return <svg viewBox="0 0 220 240" className="chord-diagram" role="img" aria-label={c.name+': '+c.frets.map((v,i)=>(6-i)+'ª cuerda '+(v<0?'no tocar':v===0?'al aire':'traste '+v)).join(', ')}><text x="110" y="26" textAnchor="middle" fontFamily="Georgia" fontSize="25">{chord}</text>{[0,1,2,3,4].map(i=><line key={'h'+i} x1="35" x2="185" y1={65+i*32} y2={65+i*32} stroke="#8c968b" strokeWidth={i===0?4:1}/>)}{c.frets.map((f,i)=><g key={i}><line x1={35+i*30} x2={35+i*30} y1="65" y2="193" stroke="#8c968b"/>{f<=0?<text x={35+i*30} y="52" textAnchor="middle" fontSize="17">{f<0?'×':'○'}</text>:<><circle cx={35+i*30} cy={65+(f-.5)*32} r="12" fill={c.fingers[i]===2?'#e97d32':'#1b4c3b'}/><text x={35+i*30} y={70+(f-.5)*32} textAnchor="middle" fontSize="14" fill="white">{c.fingers[i]}</text></>}<text x={35+i*30} y="219" fontSize="14" textAnchor="middle">{['E','A','D','G','B','e'][i]}</text></g>)}</svg>;}
+export function PlayChord({chord}:{chord:string}){return <button className="button secondary" onClick={()=>playNotes(chords[chord].midi).catch(()=>toast.error('No se pudo iniciar el audio.'))}><Icon name="volume" size={19}/>Escuchar acorde</button>;}
+export const emptyState:AppState={profile:null,completions:[],sessions:[],favorites:[]};
+type Context={data:AppState;reload:()=>Promise<void>;save:(payload:Record<string,unknown>)=>Promise<Record<string,unknown>>;profile:Profile;user:{name:string;email:string}|null};
+export const AppContext=createContext<Context|null>(null);
+export function useApp(){const c=useContext(AppContext);if(!c)throw new Error('App context');return c;}
+export function timeLabel(seconds:number){return Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');}
+
