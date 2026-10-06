@@ -75,7 +75,7 @@ final class StudioRecorder: NSObject, ObservableObject, AVAudioPlayerDelegate, A
         guard hasRecording, !isPlaying else { return }
         
         do {
-            audioPlayer = try AVAudioPlayer(contentsOfURL: recordingURL)
+            audioPlayer = try AVAudioPlayer(contentsOf: recordingURL)
             audioPlayer?.delegate = self
             audioPlayer?.play()
             isPlaying = true

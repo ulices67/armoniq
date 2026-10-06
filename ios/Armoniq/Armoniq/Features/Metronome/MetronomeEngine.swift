@@ -55,7 +55,9 @@ final class MetronomeEngine: ObservableObject {
     
     private func startTimer() {
         let interval = 60.0 / Double(bpm)
-        timer = DispatchSourceTimer.makeRepeatingTimer(interval: interval, queue: timerQueue) { [weak self] in
+        timer = DispatchSource.makeTimerSource(queue: timerQueue)
+        timer?.schedule(deadline: .now(), repeating: interval, leeway: .nanoseconds(1_000_000))
+        timer?.setEventHandler { [weak self] in
             self?.tick()
         }
         timer?.resume()
@@ -112,14 +114,5 @@ final class MetronomeEngine: ObservableObject {
     
     deinit {
         timer?.cancel()
-    }
-}
-
-private extension DispatchSourceTimer {
-    static func makeRepeatingTimer(interval: TimeInterval, queue: DispatchQueue, handler: @escaping () -> Void) -> DispatchSourceTimer {
-        let timer = DispatchSource.makeTimerSource(queue: queue)
-        timer.schedule(deadline: .now(), repeating: interval, leeway: .nanoseconds(1_000_000))
-        timer.setEventHandler(handler: handler)
-        return timer
     }
 }

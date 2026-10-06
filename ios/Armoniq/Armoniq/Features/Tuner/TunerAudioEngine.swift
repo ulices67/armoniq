@@ -41,7 +41,7 @@ final class TunerAudioEngine: ObservableObject {
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .allowBluetooth])
+            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .allowBluetoothHFP])
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
             self.errorMessage = "No se pudo configurar la sesión de audio: \(error.localizedDescription)"

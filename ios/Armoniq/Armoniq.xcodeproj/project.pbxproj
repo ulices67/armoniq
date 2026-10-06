@@ -31,7 +31,7 @@
 		A10000000000000000000024 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A10000000000000000000026 /* AudioSynthesizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSynthesizer.swift; sourceTree = "<group>"; };
 		A10000000000000000000028 /* TunerAudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunerAudioEngine.swift; sourceTree = "<group>"; };
-		A1000000000000000000002A /* TunerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunerAudioEngine.swift; sourceTree = "<group>"; };
+		A1000000000000000000002A /* TunerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunerView.swift; sourceTree = "<group>"; };
 		A1000000000000000000002C /* MetronomeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetronomeEngine.swift; sourceTree = "<group>"; };
 		A1000000000000000000002E /* MetronomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetronomeView.swift; sourceTree = "<group>"; };
 		A10000000000000000000030 /* ChordModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordModels.swift; sourceTree = "<group>"; };
